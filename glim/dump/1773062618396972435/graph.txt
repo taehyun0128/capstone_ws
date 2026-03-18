@@ -1,0 +1,8 @@
+num_submaps: 4
+num_all_frames: 6067
+num_matching_cost_factors: 5
+matching_cost vgicp_gpu 2 3
+matching_cost vgicp_gpu 0 3
+matching_cost vgicp_gpu 1 2
+matching_cost vgicp_gpu 0 2
+matching_cost vgicp_gpu 0 1
