@@ -1,0 +1,39 @@
+# Required parameters for rko_lio launch
+imu_topic: /ouster/imu
+lidar_topic: /ouster/points
+base_frame: base_link
+
+# Frames (if TF tree is correct, these help avoid frame-id mismatch)
+imu_frame: os_imu
+lidar_frame: os_sensor
+odom_frame: odom
+odom_topic: /rko_lio/odometry
+invert_odom_tf: false
+
+# Localization options
+enable_localization: true
+global_map_path: /home/taehyun/go2_ws/src/yeah_bringup/map/glim_map.ply
+global_voxel_size: 0.1
+publish_global_map: true
+global_map_topic: /rko_lio/global_map
+
+# Useful visualization outputs
+publish_local_map: true
+map_topic: /rko_lio/local_map
+publish_map_after: 1.0
+publish_deskewed_scan: true
+
+# Core LIO parameters (kept near defaults)
+deskew: true
+voxel_size: 1.0
+max_points_per_voxel: 20
+max_range: 100.0
+min_range: 1.0
+max_correspondance_distance: 0.5
+convergence_criterion: 0.00001
+max_num_threads: 0
+initialization_phase: false
+max_iterations: 100
+max_expected_jerk: 3.0
+double_downsample: true
+min_beta: 200.0

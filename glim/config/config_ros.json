@@ -69,7 +69,7 @@
       // "libimu_validator.so"
     ],
     // Topics
-    "imu_topic": "/imu_for_glim",
+    "imu_topic": "/go2/imu",
     "points_topic": "/ouster/points",
     "image_topic": "/image",
     // QoS options

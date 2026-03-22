@@ -19,7 +19,7 @@
       "profile": "sensor_data"
     },
     "imu_time_offset": 0.0,
-    "imu_topic": "/ouster/imu",
+    "imu_topic": "/go2/imu",
     "keep_raw_points": false,
     "lidar_frame_id": "",
     "map_frame_id": "map",

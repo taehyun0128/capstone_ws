@@ -101,7 +101,7 @@ def generate_launch_description():
     imu_bridge_node = Node(
         condition=IfCondition(use_imu_bridge),
         package="yeah_bringup",
-        executable="imu_to_glim.py",
+        executable="imu_to_go2imu.py",
         name="imu_to_glim_bridge",
         output="screen",
         parameters=[
@@ -132,7 +132,7 @@ def generate_launch_description():
             DeclareLaunchArgument("use_imu_bridge", default_value="true"),
             DeclareLaunchArgument("imu_bridge_in_topic", default_value="/imu"),
             DeclareLaunchArgument(
-                "imu_bridge_out_topic", default_value="/imu_for_glim"
+                "imu_bridge_out_topic", default_value="/go2/imu"
             ),
             DeclareLaunchArgument("imu_bridge_frame_id", default_value="imu"),
             DeclareLaunchArgument(

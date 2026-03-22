@@ -19,7 +19,12 @@ install(
 )
 
 install(
-  PROGRAMS scripts/imu_to_glim.py
+  DIRECTORY map
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(
+  PROGRAMS scripts/imu_to_go2imu.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

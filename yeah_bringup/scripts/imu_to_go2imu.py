@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+#imu_to_go2/imu
+#unitree_go/IMUState -> sensor_msgs/Imu
 import math
 
 import rclpy
@@ -11,10 +12,10 @@ from unitree_go.msg import IMUState
 
 class ImuToGlimBridge(Node):
     def __init__(self) -> None:
-        super().__init__("imu_to_glim_bridge")
+        super().__init__("imu_to_go2imu_bridge")
 
         self.declare_parameter("in_topic", "/imu")
-        self.declare_parameter("out_topic", "/imu_for_glim")
+        self.declare_parameter("out_topic", "/go2/imu")
         self.declare_parameter("frame_id", "imu")
 
         in_topic = str(self.get_parameter("in_topic").value)
