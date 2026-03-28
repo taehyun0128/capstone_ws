@@ -86,3 +86,34 @@ capstone_ws/
 ├── unitree_ros2_example/
 ├── yeah_bringup/
 └── go2_ai_mode_bridge.py
+
+## 절대경로 수정 필요 항목
+
+이 레포는 아래 파일에 개발 PC 기준 절대경로가 포함되어 있습니다.  
+다른 장치(예: Jetson)에서 실행 전 반드시 수정하세요.
+
+1. [rko_lio_go2.yaml](/home/taehyun/go2_ws/src/yeah_bringup/config/rko_lio_go2.yaml:15)  
+수정 대상: `global_map_path`  
+현재값: `/home/taehyun/go2_ws/src/yeah_bringup/map/glim_map.ply`  
+수정 예시: `/home/<USER>/<WS>/src/yeah_bringup/map/glim_map.ply`
+
+2. [glim_rosnode.cpp](/home/taehyun/go2_ws/src/glim_ros2/src/glim_rosnode.cpp:27)  
+수정 대상: `base_dump_dir`  
+현재값: `"/home/taehyun/go2_ws/glim_map"`  
+수정 예시: `"/home/<USER>/<WS>/glim_map"` 또는 launch 파라미터로 외부화
+
+3. [glim_ros2/config/config.json](/home/taehyun/go2_ws/src/glim_ros2/config/config.json:6)  
+수정 대상: `config_path`  
+현재값: `/home/taehyun/go2_ws/src/glim/dump/.../config`  
+수정 예시: 현재 장치의 dump/config 경로로 변경
+
+4. [glim_ros2/map/config/config.json](/home/taehyun/go2_ws/src/glim_ros2/map/config/config.json:6)  
+수정 대상: `config_path`  
+현재값: `/home/taehyun/go2_ws/src/glim/dump/.../config`  
+수정 예시: 현재 장치의 dump/config 경로로 변경
+
+절대경로 점검 명령:
+`rg -n --hidden -S "/home/taehyun/go2_ws" src -g '!**/.git/**' -g '!**/dump/**'`
+
+실행 luanch파일
+ros2 launch yeah_bringup go2_ouster_rko_lio.launch.py
