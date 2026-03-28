@@ -13,11 +13,18 @@
 # limitations under the License.
 
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import ComposableNodeContainer, Node
 from launch_ros.descriptions import ComposableNode
+from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
+    # ADDED (2026-03-27): launch args to control go2_driver TF/odom outputs.
+    publish_odom_tf = LaunchConfiguration('publish_odom_tf')
+    publish_odom_msg = LaunchConfiguration('publish_odom_msg')
+    tf_topic = LaunchConfiguration('tf_topic')
     composable_nodes = []
 
     composable_node = ComposableNode(
@@ -25,7 +32,17 @@ def generate_launch_description():
         plugin='go2_driver::Go2Driver',
         name='go2_driver',
         namespace='',
-
+        # KEPT AS COMMENT (2026-03-27): original launch had no TF remap.
+        # remappings=[],
+        remappings=[
+            ('/tf', tf_topic),
+        ],
+        # KEPT AS COMMENT (2026-03-27): original launch had no parameters here.
+        # parameters=[],
+        parameters=[{
+            'publish_odom_tf': ParameterValue(publish_odom_tf, value_type=bool),
+            'publish_odom_msg': ParameterValue(publish_odom_msg, value_type=bool),
+        }],
     )
     composable_nodes.append(composable_node)
 
@@ -52,6 +69,27 @@ def generate_launch_description():
     )
 
     ld = LaunchDescription()
+    ld.add_action(
+        DeclareLaunchArgument(
+            'tf_topic',
+            default_value='/tf',
+            description='Output TF topic for go2_driver',
+        )
+    )
+    ld.add_action(
+        DeclareLaunchArgument(
+            'publish_odom_tf',
+            default_value='true',
+            description='Publish odom -> base_link TF from go2_driver',
+        )
+    )
+    ld.add_action(
+        DeclareLaunchArgument(
+            'publish_odom_msg',
+            default_value='true',
+            description='Publish /odom from go2_driver',
+        )
+    )
     ld.add_action(container)
     ld.add_action(pointclod_to_laserscan_cmd)
 

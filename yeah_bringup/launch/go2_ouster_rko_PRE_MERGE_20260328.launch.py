@@ -28,6 +28,10 @@ def generate_launch_description():
     imu_bridge_in_topic = LaunchConfiguration("imu_bridge_in_topic")
     imu_bridge_out_topic = LaunchConfiguration("imu_bridge_out_topic")
     imu_bridge_frame_id = LaunchConfiguration("imu_bridge_frame_id")
+    # ADDED (2026-03-27): isolate go2_driver TF from /tf used by rko_lio.
+    go2_publish_odom_tf = LaunchConfiguration("go2_publish_odom_tf")
+    go2_publish_odom_msg = LaunchConfiguration("go2_publish_odom_msg")
+    go2_tf_topic = LaunchConfiguration("go2_tf_topic")
 
     # static tf (edit these after you measure the bracket)
     x = LaunchConfiguration("x")
@@ -48,6 +52,13 @@ def generate_launch_description():
         ),
         launch_arguments={
             "rviz": "False",
+            # KEPT AS COMMENT (2026-03-27): original go2_ouster only forwarded rviz.
+            # "publish_odom_tf": "<not_set>",
+            # "publish_odom_msg": "<not_set>",
+            # "tf_topic": "<not_set>",
+            "publish_odom_tf": go2_publish_odom_tf,
+            "publish_odom_msg": go2_publish_odom_msg,
+            "tf_topic": go2_tf_topic,
         }.items(),
     )
 
@@ -130,9 +141,22 @@ def generate_launch_description():
             DeclareLaunchArgument("pub_static_tf", default_value="true"),
             DeclareLaunchArgument("use_rviz", default_value="true"),
             DeclareLaunchArgument("use_imu_bridge", default_value="true"),
+            # ADDED (2026-03-27): defaults chosen to prevent TF conflicts with rko_lio.
+            DeclareLaunchArgument(
+                "go2_publish_odom_tf",
+                default_value="false",
+            ),
+            DeclareLaunchArgument(
+                "go2_publish_odom_msg",
+                default_value="true",
+            ),
+            DeclareLaunchArgument(
+                "go2_tf_topic",
+                default_value="/tf_go2",
+            ),
             DeclareLaunchArgument("imu_bridge_in_topic", default_value="/imu"),
             DeclareLaunchArgument(
-                "imu_bridge_out_topic", default_value="/imu_for_glim"
+                "imu_bridge_out_topic", default_value="/go2/imu"
             ),
             DeclareLaunchArgument("imu_bridge_frame_id", default_value="imu"),
             DeclareLaunchArgument(
