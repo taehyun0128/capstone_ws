@@ -117,3 +117,22 @@ capstone_ws/
 
 실행 luanch파일
 ros2 launch yeah_bringup go2_ouster_rko_lio.launch.py
+
+# Unitree 모델 경로
+export UNITREE_MODEL_DIR=~/unitree_model
+
+# ROS2/CycloneDDS 통신 설정
+export ROS_DOMAIN_ID=0
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces>
+                        <NetworkInterface name="enp12s0" priority="default" multicast="default" />
+                        </Interfaces></General></Domain></CycloneDDS>'
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+#적용
+source ~/.bashrc
+echo $RMW_IMPLEMENTATION
+echo $ROS_DOMAIN_ID
+echo $CYCLONEDDS_URI
