@@ -35,9 +35,22 @@ namespace go2_driver
 
 Go2Driver::Go2Driver(
   const rclcpp::NodeOptions & options)
-: Node("go2_driver", options),
-  tf_broadcaster_(this)
+: Node("go2_driver", options)
 {
+  // ADDED (2026-03-27): runtime toggles to avoid TF/odom conflicts with rko_lio.
+  publish_odom_tf_ = this->declare_parameter<bool>("publish_odom_tf", true);
+  publish_odom_msg_ = this->declare_parameter<bool>("publish_odom_msg", true);
+  // ADDED (2026-03-27): startup log to verify parameter wiring from launch files.
+  RCLCPP_INFO(
+    this->get_logger(),
+    "go2_driver params: publish_odom_tf=%s, publish_odom_msg=%s",
+    publish_odom_tf_ ? "true" : "false",
+    publish_odom_msg_ ? "true" : "false");
+  // ADDED (2026-03-27): only create TF broadcaster when TF output is enabled.
+  if (publish_odom_tf_) {
+    tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(this);
+  }
+
   rclcpp::QoS qos_profile(rclcpp::QoSInitialization::from_rmw(rmw_qos_profile_default));
   qos_profile.durability(RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL);
 
@@ -138,20 +151,57 @@ void Go2Driver::publish_lidar(const sensor_msgs::msg::PointCloud2::SharedPtr msg
 
 void Go2Driver::publish_pose_stamped(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
 {
-  geometry_msgs::msg::TransformStamped transform;
-  transform.header.stamp = now();
-  transform.header.frame_id = "odom";
-  transform.child_frame_id = "base_link";
-  transform.transform.translation.x = msg->pose.position.x;
-  transform.transform.translation.y = msg->pose.position.y;
-  transform.transform.translation.z = msg->pose.position.z + 0.07;
-  transform.transform.rotation.x = msg->pose.orientation.x;
-  transform.transform.rotation.y = msg->pose.orientation.y;
-  transform.transform.rotation.z = msg->pose.orientation.z;
-  transform.transform.rotation.w = msg->pose.orientation.w;
-  tf_broadcaster_.sendTransform(transform);
+  // KEPT AS COMMENT (2026-03-27): original behavior published odom->base_link TF unconditionally.
+  // geometry_msgs::msg::TransformStamped transform;
+  // transform.header.stamp = now();
+  // transform.header.frame_id = "odom";
+  // transform.child_frame_id = "base_link";
+  // transform.transform.translation.x = msg->pose.position.x;
+  // transform.transform.translation.y = msg->pose.position.y;
+  // transform.transform.translation.z = msg->pose.position.z + 0.07;
+  // transform.transform.rotation.x = msg->pose.orientation.x;
+  // transform.transform.rotation.y = msg->pose.orientation.y;
+  // transform.transform.rotation.z = msg->pose.orientation.z;
+  // transform.transform.rotation.w = msg->pose.orientation.w;
+  // tf_broadcaster_.sendTransform(transform);
 
-  if (!odom_published_) {
+  // ADDED (2026-03-27): publish TF only when enabled.
+  if (publish_odom_tf_) {
+    geometry_msgs::msg::TransformStamped transform;
+    transform.header.stamp = now();
+    transform.header.frame_id = "odom";
+    transform.child_frame_id = "base_link";
+    transform.transform.translation.x = msg->pose.position.x;
+    transform.transform.translation.y = msg->pose.position.y;
+    transform.transform.translation.z = msg->pose.position.z + 0.07;
+    transform.transform.rotation.x = msg->pose.orientation.x;
+    transform.transform.rotation.y = msg->pose.orientation.y;
+    transform.transform.rotation.z = msg->pose.orientation.z;
+    transform.transform.rotation.w = msg->pose.orientation.w;
+    if (tf_broadcaster_) {
+      tf_broadcaster_->sendTransform(transform);
+    }
+  }
+
+  // KEPT AS COMMENT (2026-03-27): original behavior published /odom once unconditionally.
+  // if (!odom_published_) {
+  //   nav_msgs::msg::Odometry odom;
+  //   odom.header.stamp = now();
+  //   odom.header.frame_id = "odom";
+  //   odom.child_frame_id = "base_link";
+  //   odom.pose.pose.position.x = msg->pose.position.x;
+  //   odom.pose.pose.position.y = msg->pose.position.y;
+  //   odom.pose.pose.position.z = msg->pose.position.z + 0.07;
+  //   odom.pose.pose.orientation.x = msg->pose.orientation.x;
+  //   odom.pose.pose.orientation.y = msg->pose.orientation.y;
+  //   odom.pose.pose.orientation.z = msg->pose.orientation.z;
+  //   odom.pose.pose.orientation.w = msg->pose.orientation.w;
+  //   odom_pub_->publish(odom);
+  //   odom_published_ = true;
+  // }
+
+  // ADDED (2026-03-27): publish /odom only when enabled.
+  if (publish_odom_msg_ && !odom_published_) {
     nav_msgs::msg::Odometry odom;
     odom.header.stamp = now();
     odom.header.frame_id = "odom";

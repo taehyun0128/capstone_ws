@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
   rclcpp::shutdown();
 
   // Generate dump directory name as: glim_map_YYYYMMDD_HHMMSS
-  const std::string base_dump_dir = "/home/taehyun/go2_ws/src/glim/dump";
+  const std::string base_dump_dir = "/home/taehyun/go2_ws/glim_map";
   auto make_dump_name = []() {
     const auto now = std::chrono::system_clock::now();
     const std::time_t now_t = std::chrono::system_clock::to_time_t(now);

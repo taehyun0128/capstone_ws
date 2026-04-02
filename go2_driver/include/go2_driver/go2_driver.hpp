@@ -139,9 +139,15 @@ private:
 
   rclcpp::TimerBase::SharedPtr timer_;
   rclcpp::TimerBase::SharedPtr timer_lidar_;
-  tf2_ros::TransformBroadcaster tf_broadcaster_;
+  // KEPT AS COMMENT (2026-03-27): original code always created a broadcaster member.
+  // tf2_ros::TransformBroadcaster tf_broadcaster_;
+  // ADDED (2026-03-27): optional broadcaster to avoid even advertising TF when disabled.
+  std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
   sensor_msgs::msg::Joy joy_state_;
 
+  // ADDED (2026-03-27): runtime toggles for TF/odom publish control.
+  bool publish_odom_tf_{true};
+  bool publish_odom_msg_{true};
   bool odom_published_{false};
 };
 
