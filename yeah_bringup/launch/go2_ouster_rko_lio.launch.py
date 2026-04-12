@@ -206,7 +206,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "global_map_path",
-                default_value="/home/taehyun/go2_ws/glim_map/b1_hallway_20260323.ply",
+                default_value="/home/taehyun/go2_ws/glim_map/b1_hallway_20260411_zup.ply",
             ),
             DeclareLaunchArgument("imu_topic", default_value="/go2/imu"),
             DeclareLaunchArgument("imu_frame", default_value="imu"),

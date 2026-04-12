@@ -24,7 +24,9 @@ install(
 )
 
 install(
-  PROGRAMS scripts/imu_to_go2imu.py
+  PROGRAMS
+    scripts/imu_to_go2imu.py
+    scripts/goal_pose_to_nav2_action.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
