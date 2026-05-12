@@ -185,13 +185,13 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "rko_global_map_path",
-                default_value="/home/taehyun/go2_ws/glim_map/b1_hallway_20260323.ply",
+                default_value="/home/taehyun/go2_ws/glim_map/machining_room_0506_z_up.ply",
             ),
             DeclareLaunchArgument("rko_start_delay_sec", default_value="0.0"),
             DeclareLaunchArgument(
                 "map_yaml",
                 default_value=PathJoinSubstitution(
-                    [FindPackageShare("yeah_bringup"), "map", "b1_hallway", "map.yaml"]
+                    [FindPackageShare("yeah_bringup"), "map", "machining_room_0506_p3", "map.yaml"]
                 ),
             ),
             DeclareLaunchArgument("input_cloud_topic", default_value="/ouster/points"),
