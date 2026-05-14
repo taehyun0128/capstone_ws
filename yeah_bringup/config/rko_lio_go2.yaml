@@ -37,7 +37,7 @@ lidar_topic: /ouster/points
 lidar_frame: os_sensor
 imu_frame: imu
 # localization config
-global_map_path: /home/taehyun/go2_ws/glim_map/machining_room_0506_z_up.ply
+global_map_path: /home/taehyun/yeah_ws/glim_map/machining_room_0506_z_up.ply
 global_voxel_size: 1.0
 publish_global_map: true
 enable_localization: true

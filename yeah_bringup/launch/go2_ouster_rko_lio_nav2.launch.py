@@ -185,7 +185,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "rko_global_map_path",
-                default_value="/home/taehyun/go2_ws/glim_map/machining_room_0506_z_up.ply",
+                default_value="/home/taehyun/yeah_ws/glim_map/machining_room_0506_z_up.ply",
             ),
             DeclareLaunchArgument("rko_start_delay_sec", default_value="0.0"),
             DeclareLaunchArgument(
